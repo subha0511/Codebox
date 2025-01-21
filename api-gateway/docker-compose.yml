@@ -1,0 +1,17 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.0
+    command: ['start-dev','--http-port=9191','--import-realm']
+    volumes:
+      - ./realm-config:/opt/keycloak/data/import
+    container_name: keycloak
+    hostname: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin1234
+    ports:
+      - "9191:9191"
+    deploy:
+      resources:
+        limits:
+          memory: 512M

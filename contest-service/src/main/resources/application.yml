@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: contest-service
+
+  datasource:
+    url: ${CONTEST_DB_URL:jdbc:postgresql://localhost:5432/contest_db}
+    username: ${CONTEST_DB_USERNAME:postgres}
+    password: ${CONTEST_DB_PASSWORD:root}
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show_sql: true
+
+server:
+  port: ${CONTEST_SERVER_PORT:8081}
