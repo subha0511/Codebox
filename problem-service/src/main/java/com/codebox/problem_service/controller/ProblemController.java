@@ -7,6 +7,7 @@ import com.codebox.problem_service.mapper.impl.ProblemMapper;
 import com.codebox.problem_service.model.Problem;
 import com.codebox.problem_service.service.ProblemService;
 import com.codebox.problem_service.utils.MapperUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Tag(name = "Problem Controller")
 @RestController
 @RequestMapping("/api/problem")
 public class ProblemController {

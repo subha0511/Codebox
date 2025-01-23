@@ -17,5 +17,11 @@ spring:
         format_sql: true
         show_sql: true
 
+springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+    api-docs:
+      path: /api-docs
+
 server:
   port: ${CONTEST_SERVER_PORT:8081}

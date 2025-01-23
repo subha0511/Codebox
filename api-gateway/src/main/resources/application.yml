@@ -2,5 +2,35 @@ spring:
   application:
     name: api-gateway
 
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${REALM_URL}
+        registration:
+          keycloak:
+            client-id: codebox
+            client-secret: udkr01hqxc9hXqNzFeTSK6Vjjry56JZc
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            redirect-uri: ${baseUrl}/login/oauth2/code/codebox
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: problem-service
+        url: /aggregate/problem-service/v3/api-docs
+      - name: submission-service
+        url: /aggregate/submission-service/v3/api-docs
+      - name: contest-service
+        url: /aggregate/contest-service/v3/api-docs
+  api-docs:
+    path: /api-docs
+
 server:
   port: 9010
+
+OAUTH2_SERVER_URL: http://localhost:9191
+REALM_URL: ${OAUTH2_SERVER_URL}/realms/codebox
