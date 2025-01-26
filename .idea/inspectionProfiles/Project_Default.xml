@@ -27,5 +27,32 @@
         </list>
       </option>
     </inspection_tool>
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="api-gateway" />
+          <option value="api-gateway" />
+          <option value="problem-service" />
+          <option value="worker" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="org.springframework:spring-webmvc:6.1.8" />
+          <option value="io.netty:netty-common:4.1.114.Final" />
+          <option value="ch.qos.logback:logback-classic:1.4.11" />
+          <option value="org.apache.commons:commons-compress:1.21" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
   </profile>
 </component>

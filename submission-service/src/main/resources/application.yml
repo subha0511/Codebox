@@ -11,8 +11,32 @@ spring:
       password: ${SUBMISSION_DB_PASSWORD:password}
       authentication-database: admin
 
+  kafka:
+    bootstrap-servers=: localhost:9092
+    template.default-topic: problem-submission
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties.schema.registry.url: http://localhost:28081
+
 problem-service:
   url: ${PROBLEM_SERVICE_URL:http://localhost:8080}
+
+resilience4j:
+  circuitbreaker.instances.problem-service:
+    failureRateThreshold: 50
+    waitDurationInOpenState: 5s
+    permittedNumberOfCallsInHalfOpenState: 3
+    minimumNumberOfCalls: 5
+    slidingWindowSize: 10
+    slidingWindowType: COUNT_BASED
+    automaticTransitionFromOpenToHalfOpenEnabled: true
+    registerHealthIndicator: true
+  timelimiter.instances.problem-service:
+    timeoutDuration: 5s
+  retry.instances.problem-service:
+    maxAttempts: 3
+    waitDuration: 2s
 
 springdoc:
   swagger-ui:
@@ -22,3 +46,7 @@ springdoc:
 
 server:
   port: ${SUBMISSION_SERVER_PORT:8082}
+#
+#logging:
+#  level:
+#    org.springframework: DEBUG

@@ -1,12 +1,11 @@
 package com.codebox.submission_service.dto;
 
 import com.codebox.submission_service.pojo.SubmissionTestcase;
-import com.codebox.submission_service.pojo.Language;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -23,7 +22,7 @@ public class SubmissionDetailDTO {
   private String code;
 
   @NotNull
-  private Language language;
+  private String language;
 
   @NotNull
   private Long problemId;

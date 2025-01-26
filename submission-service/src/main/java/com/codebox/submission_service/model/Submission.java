@@ -1,12 +1,11 @@
 package com.codebox.submission_service.model;
 
 import com.codebox.submission_service.pojo.SubmissionTestcase;
-import com.codebox.submission_service.pojo.Language;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,7 +28,7 @@ public class Submission {
   private String code;
 
   @NotNull
-  private Language language;
+  private String language;
 
   @NotNull
   @Field(name = "problem_id")

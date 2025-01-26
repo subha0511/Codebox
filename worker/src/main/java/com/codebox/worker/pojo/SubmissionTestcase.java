@@ -1,20 +1,22 @@
-package com.codebox.submission_service.pojo;
+package com.codebox.worker.pojo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Testcase {
+public class SubmissionTestcase {
 
   private String input;
 
   private String output;
 
-  private String type;
+  private String expectedOutput;
+
+  private String type = "PUBLIC";
+
+  private String status = "PENDING";
 
 }

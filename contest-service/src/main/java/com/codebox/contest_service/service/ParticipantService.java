@@ -21,7 +21,8 @@ public class ParticipantService {
 
   public Participant saveParticipant(Participant participant) {
     Optional<Participant> existingParticipant = participantRepository.findByContestIdAndUserId(
-        participant.getContest().getId(), participant.getUserId());
+        participant.getContest()
+            .getId(), participant.getUserId());
     return existingParticipant.orElseGet(() -> participantRepository.save(participant));
   }
 

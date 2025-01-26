@@ -1,7 +1,7 @@
 package com.codebox.problem_service.controller;
 
-import com.codebox.problem_service.dto.ProblemDTO;
 import com.codebox.problem_service.dto.ProblemDetailDTO;
+import com.codebox.problem_service.dto.ProblemMetadataDTO;
 import com.codebox.problem_service.mapper.impl.ProblemDetailMapper;
 import com.codebox.problem_service.mapper.impl.ProblemMapper;
 import com.codebox.problem_service.model.Problem;
@@ -42,15 +42,16 @@ public class ProblemController {
   public ResponseEntity<ProblemDetailDTO> getProblemById(@PathVariable("id") int id) {
     Optional<Problem> problem = problemService.getProblemById(id);
     return problem.map(value -> ResponseEntity.ok(problemDetailMapper.mapTo(value)))
-        .orElseGet(() -> ResponseEntity.notFound().build());
+        .orElseGet(() -> ResponseEntity.notFound()
+            .build());
   }
 
   @GetMapping(path = "")
-  public Page<ProblemDTO> getPaginatedProblems(
+  public Page<ProblemMetadataDTO> getPaginatedProblems(
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "20") int size) {
     return mapperUtils.mapEntityPageIntoDtoPage(
-        problemService.getPaginatedProblems(page, size), ProblemDTO.class);
+        problemService.getPaginatedProblems(page, size), ProblemMetadataDTO.class);
   }
 
   @PostMapping(path = "/create")

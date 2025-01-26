@@ -1,17 +1,15 @@
-package com.codebox.submission_service.pojo;
+package com.codebox.shared_dtos.domain.problem;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Problem {
+public class ProblemDetailDTO {
 
   private long id;
 
@@ -19,6 +17,6 @@ public class Problem {
 
   private String description;
 
-  private List<Testcase> testcases;
+  private List<ProblemTestcaseDTO> testcases;
 
 }

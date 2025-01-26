@@ -47,11 +47,13 @@ public class ContestController {
 
   @PostMapping(path = "/create")
   public ResponseEntity<?> createContest(@RequestBody ContestDetailsDTO contestDetailsDTO) {
-    if (contestDetailsDTO.getStartTime().isBefore(LocalDateTime.now())) {
+    if (contestDetailsDTO.getStartTime()
+        .isBefore(LocalDateTime.now())) {
       return new ResponseEntity<>(
           Map.of("message", "Start Time cannot be in past"), HttpStatus.BAD_REQUEST);
     }
-    if (contestDetailsDTO.getStartTime().isAfter(contestDetailsDTO.getEndTime())) {
+    if (contestDetailsDTO.getStartTime()
+        .isAfter(contestDetailsDTO.getEndTime())) {
       return new ResponseEntity<>(
           Map.of("message", "Start Time must be before End Time"), HttpStatus.BAD_REQUEST);
     }

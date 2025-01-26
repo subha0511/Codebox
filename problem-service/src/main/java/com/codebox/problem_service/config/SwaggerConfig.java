@@ -10,7 +10,8 @@ public class SwaggerConfig {
 
   @Bean
   public OpenAPI productServiceOpenAPI() {
-    return new OpenAPI().info(new Info().title("Problem Catalogue Service API").version("1.0")
+    return new OpenAPI().info(new Info().title("Problem Catalogue Service API")
+        .version("1.0")
         .description("API documentation for the Problem Catalogue Service"));
   }
 }

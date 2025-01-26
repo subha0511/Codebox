@@ -14,12 +14,12 @@ public class TestcaseMapper implements Mapper<Testcase, TestcaseDTO> {
   private ModelMapper modelMapper;
 
   @Override
-  public TestcaseDTO mapTo(Testcase testcase) {
-    return modelMapper.map(testcase, TestcaseDTO.class);
+  public TestcaseDTO mapTo(Testcase problemTestcase) {
+    return modelMapper.map(problemTestcase, TestcaseDTO.class);
   }
 
   @Override
-  public Testcase mapFrom(TestcaseDTO testcaseDTO) {
-    return modelMapper.map(testcaseDTO, Testcase.class);
+  public Testcase mapFrom(TestcaseDTO ProblemTestcaseDTO) {
+    return modelMapper.map(ProblemTestcaseDTO, Testcase.class);
   }
 }

@@ -1,20 +1,48 @@
-spring:
-  application:
-    name: api-gateway
+spring.application:
+  name: api-gateway
 
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            issuer-uri: ${REALM_URL}
-        registration:
-          keycloak:
-            client-id: codebox
-            client-secret: udkr01hqxc9hXqNzFeTSK6Vjjry56JZc
-            authorization-grant-type: authorization_code
-            scope: openid,profile,email
-            redirect-uri: ${baseUrl}/login/oauth2/code/codebox
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          keycloak:
+#            issuer-uri: ${REALM_URL}
+#        registration:
+#          keycloak:
+#            client-id: codebox
+#            client-secret: udkr01hqxc9hXqNzFeTSK6Vjjry56JZc
+#            authorization-grant-type: authorization_code
+#            scope: openid,profile,email
+#            redirect-uri: ${baseUrl}/login/oauth2/code/codebox
+
+management.endpoints:
+  web:
+    exposure:
+      include: "*"
+  health:
+    show-details: always
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+resilience4j:
+  circuitbreaker.configs.default:
+    failureRateThreshold: 50
+    waitDurationInOpenState: 5s
+    permittedNumberOfCallsInHalfOpenState: 3
+    minimumNumberOfCalls: 5
+    slidingWindowSize: 10
+    slidingWindowType: COUNT_BASED
+    automaticTransitionFromOpenToHalfOpenEnabled: true
+    registerHealthIndicator: true
+
+  timelimiter.configs.default:
+    timeoutDuration: 5s
+
+  retry.configs.default:
+    maxAttempts: 3
+    waitDuration: 2s
 
 springdoc:
   swagger-ui:

@@ -1,6 +1,8 @@
 package com.codebox.submission_service.client;
 
-import com.codebox.submission_service.pojo.Problem;
+import com.codebox.shared_dtos.domain.problem.ProblemDetailDTO;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 
@@ -9,6 +11,11 @@ import java.util.Optional;
 public interface ProblemClient {
 
   @GetExchange("/api/internal-problem/{id}")
-  Optional<Problem> getProblemById(@PathVariable long id);
+  @CircuitBreaker(name = "problem-service", fallbackMethod = "fallbackGetDefaultProblemById")
+  @Retry(name = "problem-service")
+  Optional<ProblemDetailDTO> getProblemById(@PathVariable("id") long id);
 
+  default Optional<ProblemDetailDTO> fallbackGetDefaultProblemById(long id, Throwable throwable) {
+    return Optional.empty();
+  }
 }

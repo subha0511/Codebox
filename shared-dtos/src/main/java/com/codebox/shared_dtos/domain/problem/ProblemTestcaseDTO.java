@@ -1,4 +1,4 @@
-package com.codebox.problem_service.dto;
+package com.codebox.shared_dtos.domain.problem;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProblemDTO {
+public class ProblemTestcaseDTO {
 
-  private long id;
+  private String input;
 
-  private String title;
+  private String output;
 
-  private String description;
+  private String type;
 
 }

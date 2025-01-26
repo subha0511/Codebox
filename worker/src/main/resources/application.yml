@@ -1,0 +1,18 @@
+spring:
+  application.name: worker
+
+  kafka:
+    bootstrap-servers:
+    - localhost:9092
+    consumer:
+      group-id: submission-worker
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        schema.registry.url: http://localhost:28081
+        specific.avro.reader: true
+
+server:
+  port: 8083

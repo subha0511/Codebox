@@ -20,7 +20,9 @@ public class TestcaseAttributeConvertor implements AttributeConverter<List<Testc
     if (attribute == null || attribute.isEmpty()) {
       return null;
     }
-    return attribute.stream().map(this::objectToString).collect(Collectors.joining(DELIMITER));
+    return attribute.stream()
+        .map(this::objectToString)
+        .collect(Collectors.joining(DELIMITER));
   }
 
   @Override
@@ -28,13 +30,14 @@ public class TestcaseAttributeConvertor implements AttributeConverter<List<Testc
     if (dbData == null || dbData.isEmpty()) {
       return null;
     }
-    return Arrays.stream(dbData.split(DELIMITER)).map(this::stringToObject)
+    return Arrays.stream(dbData.split(DELIMITER))
+        .map(this::stringToObject)
         .collect(Collectors.toList());
   }
 
-  private String objectToString(Testcase testcase) {
+  private String objectToString(Testcase problemTestcase) {
     try {
-      return OBJECT_MAPPER.writeValueAsString(testcase);
+      return OBJECT_MAPPER.writeValueAsString(problemTestcase);
     } catch (JsonProcessingException e) {
       throw new IllegalArgumentException("Failed to serialize Testcase", e);
     }

@@ -1,15 +1,15 @@
 package com.codebox.submission_service.controller;
 
+import com.codebox.shared_dtos.domain.problem.ProblemDetailDTO;
 import com.codebox.submission_service.client.ProblemClient;
 import com.codebox.submission_service.dto.SubmissionDTO;
+import com.codebox.submission_service.mapper.impl.ProblemTestcaseMapper;
 import com.codebox.submission_service.mapper.impl.SubmissionDetailMapper;
 import com.codebox.submission_service.mapper.impl.SubmissionMapper;
-import com.codebox.submission_service.mapper.impl.TestcaseMapper;
 import com.codebox.submission_service.model.Submission;
-import com.codebox.submission_service.pojo.Problem;
 import com.codebox.submission_service.service.SubmissionService;
 import jakarta.validation.Valid;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +28,9 @@ import java.util.Optional;
 public class SubmissionController {
 
   @Autowired
+  private ProblemClient problemClient;
+
+  @Autowired
   private SubmissionService submissionService;
 
   @Autowired
@@ -37,10 +40,7 @@ public class SubmissionController {
   private SubmissionDetailMapper submissionDetailMapper;
 
   @Autowired
-  private TestcaseMapper testcaseMapper;
-
-  @Autowired
-  private ProblemClient problemClient;
+  private ProblemTestcaseMapper problemTestcaseMapper;
 
   @GetMapping(path = "/{id}")
   public ResponseEntity<?> getSubmissionById(@NotNull @PathVariable("id") String id) {
@@ -53,15 +53,18 @@ public class SubmissionController {
 
   @PostMapping(path = "/")
   public ResponseEntity<?> createSubmission(@Valid @RequestBody SubmissionDTO submissionDTO) {
-    Optional<Problem> problem = problemClient.getProblemById(submissionDTO.getProblemId());
+    Optional<ProblemDetailDTO> problem = problemClient.getProblemById(submissionDTO.getProblemId());
 
     if (problem.isEmpty()) {
       return new ResponseEntity<>(Map.of("message", "Problem Not Found"), HttpStatus.NOT_FOUND);
     }
 
     Submission submission = submissionMapper.mapFrom(submissionDTO);
-    submission.setSubmissionTestcases(
-        problem.get().getTestcases().stream().map(testcaseMapper::mapTo).toList());
+    submission.setSubmissionTestcases(problem.get()
+        .getTestcases()
+        .stream()
+        .map(problemTestcaseMapper::mapTo)
+        .toList());
     Submission savedSubmission = submissionService.save(submission);
     return new ResponseEntity<>(submissionMapper.mapTo(savedSubmission), HttpStatus.CREATED);
   }
