@@ -9,14 +9,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -28,17 +27,16 @@ import java.util.List;
 @Table(name = "problems")
 public class Problem {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-  private String title;
+    private String title;
 
-  @Column(columnDefinition = "TEXT")
-  private String description;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-  @Convert(converter = TestcaseAttributeConvertor.class)
-  @Column(name = "testcases", columnDefinition = "TEXT")
-  private List<Testcase> testcases;
-
+    @Convert(converter = TestcaseAttributeConvertor.class)
+    @Column(name = "testcases", columnDefinition = "TEXT")
+    private List<Testcase> testcases;
 }

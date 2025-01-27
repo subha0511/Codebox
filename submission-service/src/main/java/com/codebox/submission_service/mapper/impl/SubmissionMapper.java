@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubmissionMapper implements Mapper<Submission, SubmissionDTO> {
 
-  @Autowired
-  private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-  @Override
-  public SubmissionDTO mapTo(Submission submission) {
-    return modelMapper.map(submission, SubmissionDTO.class);
-  }
+    @Override
+    public SubmissionDTO mapTo(Submission submission) {
+        return modelMapper.map(submission, SubmissionDTO.class);
+    }
 
-  @Override
-  public Submission mapFrom(SubmissionDTO submissionDTO) {
-    return modelMapper.map(submissionDTO, Submission.class);
-  }
+    @Override
+    public Submission mapFrom(SubmissionDTO submissionDTO) {
+        return modelMapper.map(submissionDTO, Submission.class);
+    }
 }

@@ -10,63 +10,54 @@ import com.codebox.submission_service.model.Submission;
 import com.codebox.submission_service.service.SubmissionService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/submission")
 public class SubmissionController {
 
-  @Autowired
-  private ProblemClient problemClient;
+    @Autowired
+    private ProblemClient problemClient;
 
-  @Autowired
-  private SubmissionService submissionService;
+    @Autowired
+    private SubmissionService submissionService;
 
-  @Autowired
-  private SubmissionMapper submissionMapper;
+    @Autowired
+    private SubmissionMapper submissionMapper;
 
-  @Autowired
-  private SubmissionDetailMapper submissionDetailMapper;
+    @Autowired
+    private SubmissionDetailMapper submissionDetailMapper;
 
-  @Autowired
-  private ProblemTestcaseMapper problemTestcaseMapper;
+    @Autowired
+    private ProblemTestcaseMapper problemTestcaseMapper;
 
-  @GetMapping(path = "/{id}")
-  public ResponseEntity<?> getSubmissionById(@NotNull @PathVariable("id") String id) {
-    Optional<Submission> submission = submissionService.getSubmissionById(id);
-    if (submission.isEmpty()) {
-      return new ResponseEntity<>(Map.of("message", "Submission Not Found"), HttpStatus.NOT_FOUND);
-    }
-    return ResponseEntity.ok(submissionMapper.mapTo(submission.get()));
-  }
-
-  @PostMapping(path = "/")
-  public ResponseEntity<?> createSubmission(@Valid @RequestBody SubmissionDTO submissionDTO) {
-    Optional<ProblemDetailDTO> problem = problemClient.getProblemById(submissionDTO.getProblemId());
-
-    if (problem.isEmpty()) {
-      return new ResponseEntity<>(Map.of("message", "Problem Not Found"), HttpStatus.NOT_FOUND);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getSubmissionById(@NotNull @PathVariable("id") String id) {
+        Optional<Submission> submission = submissionService.getSubmissionById(id);
+        if (submission.isEmpty()) {
+            return new ResponseEntity<>(Map.of("message", "Submission Not Found"), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(submissionMapper.mapTo(submission.get()));
     }
 
-    Submission submission = submissionMapper.mapFrom(submissionDTO);
-    submission.setSubmissionTestcases(problem.get()
-        .getTestcases()
-        .stream()
-        .map(problemTestcaseMapper::mapTo)
-        .toList());
-    Submission savedSubmission = submissionService.save(submission);
-    return new ResponseEntity<>(submissionMapper.mapTo(savedSubmission), HttpStatus.CREATED);
-  }
+    @PostMapping(path = "/")
+    public ResponseEntity<?> createSubmission(@Valid @RequestBody SubmissionDTO submissionDTO) {
+        Optional<ProblemDetailDTO> problem = problemClient.getProblemById(submissionDTO.getProblemId());
 
+        if (problem.isEmpty()) {
+            return new ResponseEntity<>(Map.of("message", "Problem Not Found"), HttpStatus.NOT_FOUND);
+        }
+
+        Submission submission = submissionMapper.mapFrom(submissionDTO);
+        submission.setSubmissionTestcases(problem.get().getTestcases().stream()
+                .map(problemTestcaseMapper::mapTo)
+                .toList());
+        Submission savedSubmission = submissionService.save(submission);
+        return new ResponseEntity<>(submissionMapper.mapTo(savedSubmission), HttpStatus.CREATED);
+    }
 }

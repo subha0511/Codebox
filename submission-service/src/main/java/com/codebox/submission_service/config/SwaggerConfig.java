@@ -8,10 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-  @Bean
-  public OpenAPI submissionServiceOpenAPI() {
-    return new OpenAPI().info(new Info().title("Submission Service API")
-        .version("1.0")
-        .description("API documentation for the Submission Service"));
-  }
+    @Bean
+    public OpenAPI submissionServiceOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Submission Service API")
+                        .version("1.0")
+                        .description("API documentation for the Submission Service"));
+    }
 }

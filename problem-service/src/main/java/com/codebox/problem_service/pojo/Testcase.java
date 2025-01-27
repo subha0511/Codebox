@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Testcase {
 
-  private String input;
+    private String input;
 
-  private String output;
+    private String output;
 
-  private String type;
-
+    private String type;
 }

@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SubmissionTestcase {
 
-  private String input;
+    private String input;
 
-  private String output;
+    private String output;
 
-  private String expectedOutput;
+    private String expectedOutput;
 
-  private String type = "PUBLIC";
+    private String type = "PUBLIC";
 
-  private String status = "PENDING";
-
+    private String status = "PENDING";
 }

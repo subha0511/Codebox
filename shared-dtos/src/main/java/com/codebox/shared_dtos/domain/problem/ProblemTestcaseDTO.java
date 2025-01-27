@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProblemTestcaseDTO {
 
-  private String input;
+    private String input;
 
-  private String output;
+    private String output;
 
-  private String type;
-
+    private String type;
 }

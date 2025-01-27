@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProblemTestcaseMapper implements Mapper<ProblemTestcaseDTO, SubmissionTestcase> {
 
-  @Autowired
-  private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-  @Override
-  public SubmissionTestcase mapTo(ProblemTestcaseDTO problemTestcaseDTO) {
-    return modelMapper.map(problemTestcaseDTO, SubmissionTestcase.class);
-  }
+    @Override
+    public SubmissionTestcase mapTo(ProblemTestcaseDTO problemTestcaseDTO) {
+        return modelMapper.map(problemTestcaseDTO, SubmissionTestcase.class);
+    }
 
-  @Override
-  public ProblemTestcaseDTO mapFrom(SubmissionTestcase submissionTestcase) {
-    return modelMapper.map(submissionTestcase, ProblemTestcaseDTO.class);
-  }
+    @Override
+    public ProblemTestcaseDTO mapFrom(SubmissionTestcase submissionTestcase) {
+        return modelMapper.map(submissionTestcase, ProblemTestcaseDTO.class);
+    }
 }

@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContestDetailsMapper implements Mapper<Contest, ContestDetailsDTO> {
 
-  @Autowired
-  private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-  @Override
-  public ContestDetailsDTO mapTo(Contest contest) {
-    return modelMapper.map(contest, ContestDetailsDTO.class);
-  }
+    @Override
+    public ContestDetailsDTO mapTo(Contest contest) {
+        return modelMapper.map(contest, ContestDetailsDTO.class);
+    }
 
-  @Override
-  public Contest mapFrom(ContestDetailsDTO contestDetailsDTO) {
-    return modelMapper.map(contestDetailsDTO, Contest.class);
-  }
+    @Override
+    public Contest mapFrom(ContestDetailsDTO contestDetailsDTO) {
+        return modelMapper.map(contestDetailsDTO, Contest.class);
+    }
 }

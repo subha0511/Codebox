@@ -24,20 +24,24 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "participants", uniqueConstraints = {
-    @UniqueConstraint(name = "UniqueParticipant", columnNames = {"user_id", "contest_id"})})
+@Table(
+        name = "participants",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                    name = "UniqueParticipant",
+                    columnNames = {"user_id", "contest_id"})
+        })
 public class Participant {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-  private long userId;
+    private long userId;
 
-  @JsonBackReference
-  @ToString.Exclude
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "contest_id", referencedColumnName = "id")
-  private Contest contest;
-
+    @JsonBackReference
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contest_id", referencedColumnName = "id")
+    private Contest contest;
 }

@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -31,25 +30,24 @@ import java.util.List;
 @Table(name = "contests")
 public class Contest {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-  private String title;
+    private String title;
 
-  @Type(ListArrayType.class)
-  @Column(name = "problems", columnDefinition = "bigint[]")
-  private List<Long> problems;
+    @Type(ListArrayType.class)
+    @Column(name = "problems", columnDefinition = "bigint[]")
+    private List<Long> problems;
 
-  @Column(name = "start_time")
-  private LocalDateTime startTime;
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
 
-  @Column(name = "end_time")
-  private LocalDateTime endTime;
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
 
-  @JsonManagedReference
-  @ToString.Exclude
-  @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Participant> participants;
-
+    @JsonManagedReference
+    @ToString.Exclude
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participant> participants;
 }

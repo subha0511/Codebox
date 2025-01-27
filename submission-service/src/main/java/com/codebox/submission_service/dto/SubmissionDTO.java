@@ -1,12 +1,11 @@
 package com.codebox.submission_service.dto;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @Builder
@@ -14,24 +13,19 @@ import java.util.Date;
 @AllArgsConstructor
 public class SubmissionDTO {
 
-  private String id;
+    private String id;
 
-  @NotNull
-  private String code;
+    @NotNull private String code;
 
-  @NotNull
-  private String language;
+    @NotNull private String language;
 
-  @NotNull
-  private Long problemId;
+    @NotNull private Long problemId;
 
-  @NotNull
-  private Long userId;
+    @NotNull private Long userId;
 
-  private Long contestId;
+    private Long contestId;
 
-  private String status;
+    private String status;
 
-  private Date createdAt;
-
+    private Date createdAt;
 }

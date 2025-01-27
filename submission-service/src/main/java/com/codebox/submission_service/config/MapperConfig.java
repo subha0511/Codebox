@@ -10,26 +10,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MapperConfig {
 
-  @Bean
-  public ModelMapper modelMapper() {
-    ModelMapper modelMapper = new ModelMapper();
-    modelMapper.getConfiguration()
-        .setMatchingStrategy(MatchingStrategies.LOOSE);
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
-    modelMapper.typeMap(ProblemTestcaseDTO.class, SubmissionTestcase.class)
-        .addMappings(mapper -> {
-          mapper.map(ProblemTestcaseDTO::getInput, SubmissionTestcase::setInput);
-          mapper.map(ProblemTestcaseDTO::getOutput, SubmissionTestcase::setExpectedOutput);
-          mapper.skip(SubmissionTestcase::setOutput);
+        modelMapper.typeMap(ProblemTestcaseDTO.class, SubmissionTestcase.class).addMappings(mapper -> {
+            mapper.map(ProblemTestcaseDTO::getInput, SubmissionTestcase::setInput);
+            mapper.map(ProblemTestcaseDTO::getOutput, SubmissionTestcase::setExpectedOutput);
+            mapper.skip(SubmissionTestcase::setOutput);
         });
 
-    modelMapper.typeMap(SubmissionTestcase.class, ProblemTestcaseDTO.class)
-        .addMappings(mapper -> {
-          mapper.map(SubmissionTestcase::getInput, ProblemTestcaseDTO::setInput);
-          mapper.map(SubmissionTestcase::getExpectedOutput, ProblemTestcaseDTO::setOutput);
+        modelMapper.typeMap(SubmissionTestcase.class, ProblemTestcaseDTO.class).addMappings(mapper -> {
+            mapper.map(SubmissionTestcase::getInput, ProblemTestcaseDTO::setInput);
+            mapper.map(SubmissionTestcase::getExpectedOutput, ProblemTestcaseDTO::setOutput);
         });
 
-    return modelMapper;
-  }
-
+        return modelMapper;
+    }
 }

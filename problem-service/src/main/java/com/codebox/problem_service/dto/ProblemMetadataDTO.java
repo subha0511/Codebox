@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProblemMetadataDTO {
 
-  private long id;
+    private long id;
 
-  private String title;
+    private String title;
 
-  private String description;
-
+    private String description;
 }
