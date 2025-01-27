@@ -2,7 +2,6 @@ package com.codebox.worker.service;
 
 import com.codebox.shared_dtos.schema.SubmissionSchema;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaPollerService {
 
-    @Autowired
-    private ExecutorService executorService;
+    //    @Autowired
+    //    private ExecutorService executorService;
 
     @KafkaListener(topics = "problem-submission", groupId = "submission-worker")
     public void consume(SubmissionSchema submissionSchema) {
         System.out.println(submissionSchema);
         System.out.println("Consumed message: " + submissionSchema.getId() + " " + submissionSchema.getProblemId() + " "
                 + submissionSchema.getLanguage());
-        executorService.processSubmission(submissionSchema);
+        //        executorService.processSubmission(submissionSchema);
     }
 }
