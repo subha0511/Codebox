@@ -1,64 +1,173 @@
-spring.application:
-  name: api-gateway
+# Server Configuration
+server:
+  port: ${SERVER_PORT:9010}
 
-#  security:
-#    oauth2:
-#      client:
-#        provider:
-#          keycloak:
-#            issuer-uri: ${REALM_URL}
-#        registration:
-#          keycloak:
-#            client-id: codebox
-#            client-secret: udkr01hqxc9hXqNzFeTSK6Vjjry56JZc
-#            authorization-grant-type: authorization_code
-#            scope: openid,profile,email
-#            redirect-uri: ${baseUrl}/login/oauth2/code/codebox
+# Spring Configuration
+spring:
+  application:
+    name: codebox-gateway
+  #    cloud:
+  #      gateway:
+  #        routes:
+  #          # Problem Service Route
+  #          - id: problem-service
+  #            uri: ${PROBLEM_SERVICE_URL:http://localhost:8080}
+  #            predicates:
+  #              - Path=/api/problem/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: problemServiceCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #
+  #          - id: problem-service-swagger
+  #            uri: ${PROBLEM_SERVICE_URL:http://localhost:8080}
+  #            predicates:
+  #              - Path=/problem-service/v3/api-docs/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: problemServiceSwaggerCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #              - SetPath=/api-docs
+  #
+  #          - id: contest-service
+  #            uri: ${CONTEST_SERVICE_URL:http://localhost:8081}
+  #            predicates:
+  #              - Path=/api/contest/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: contestServiceCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #
+  #          - id: contest-service-swagger
+  #            uri: ${CONTEST_SERVICE_URL:http://localhost:8081}
+  #            predicates:
+  #              - Path=/contest-service/v3/api-docs/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: contestServiceCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #              - SetPath=/api-docs
+  #
+  #          - id: submission-service
+  #            uri: ${SUBMISSION_SERVICE_URL:http://localhost:8082}
+  #            predicates:
+  #              - Path=/api/submission/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: submissionServiceCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #
+  #          - id: submission-service-swagger
+  #            uri: ${SUBMISSION_SERVICE_URL:http://localhost:8082}
+  #            predicates:
+  #              - Path=/submission-service/v3/api-docs/**
+  #            filters:
+  #              - name: CircuitBreaker
+  #                args:
+  #                  name: submissionServiceCircuitBreaker
+  #                  fallbackUri: forward:/fallback
+  #              - SetPath=/api-docs
+  #
+  #          - id: fallback
+  #            uri: forward:/fallback
+  #            predicates:
+  #              - Path=/fallback
+  
+  #  security:
+  #    oauth2:
+  #      client:
+  #        provider:
+  #          keycloak:
+  #            issuer-uri: ${REALM_URL:}
+  #        registration:
+  #          keycloak:
+  #            client-id: api-gateway
+  #            client-secret: t8Qd0iZg0i6oQQIwDYg4Ycrd6TrmMHKu
+  #            authorization-grant-type: authorization_code
+  #            scope: openid,profile,email
+  #            redirect-uri: ${baseUrl}/login/oauth2/code/{registrationId}
 
-management.endpoints:
-  web:
-    exposure:
-      include: "*"
+# Keycloak Configuration
+#keycloak:
+#  auth-server-url: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/auth}
+#  redirect-uri: ${OAUTH2_REDIRECT_URL:http://localhost:9010/api/auth/callback}
+#  token-uri: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/token}
+#  certificate-uri: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/certs}
+#  scope: openid+profile+email
+#  client:
+#    id: api-gateway
+#    secret: t8Qd0iZg0i6oQQIwDYg4Ycrd6TrmMHKu
+
+# Management Endpoints Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
   health:
     show-details: always
-    circuitbreakers:
-      enabled: true
-    ratelimiters:
-      enabled: true
+    circuitbreakers.enabled: true
+    ratelimiters.enabled: true
 
+# Resilience4j Configuration
 resilience4j:
-  circuitbreaker.configs.default:
-    failureRateThreshold: 50
-    waitDurationInOpenState: 5s
-    permittedNumberOfCallsInHalfOpenState: 3
-    minimumNumberOfCalls: 5
-    slidingWindowSize: 10
-    slidingWindowType: COUNT_BASED
-    automaticTransitionFromOpenToHalfOpenEnabled: true
-    registerHealthIndicator: true
+  circuitbreaker:
+    configs:
+      default:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        registerHealthIndicator: true
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 5s
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 2s
 
-  timelimiter.configs.default:
-    timeoutDuration: 5s
+service:
+  problem-service-url: ${PROBLEM_SERVICE_URL:http://localhost:8080}
+  submission-service-url: ${SUBMISSION_SERVICE_URL:http://localhost:8081}
+  contest-service-url: ${CONTEST_SERVICE_URL:http://localhost:8082}
 
-  retry.configs.default:
-    maxAttempts: 3
-    waitDuration: 2s
-
+# OpenAPI/Swagger Configuration
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html
+    path: /swagger-ui
+    configUrl: ${server.servlet.contextPath}/v3/api-docs/**
+    url: ${server.servlet.contextPath}/v3/api-docs/**
     urls:
       - name: problem-service
-        url: /aggregate/problem-service/v3/api-docs
-      - name: submission-service
-        url: /aggregate/submission-service/v3/api-docs
+        url: ${PROBLEM_SERVICE_URL/api-docs/**:http://localhost:8080/api-docs/**}
       - name: contest-service
-        url: /aggregate/contest-service/v3/api-docs
+        url: ${CONTEST_SERVICE_URL/api-docs/**:http://localhost:8081/api-docs/**}
+      - name: submission-service
+        url: ${SUBMISSION_SERVICE_URL/api-docs/**:http://localhost:8082/api-docs/**}
   api-docs:
     path: /api-docs
 
-server:
-  port: 9010
+# OAuth2 Configuration
+#OAUTH2_SERVER_URL: http://localhost:9191
+#REALM_URL: ${OAUTH2_SERVER_URL}/realms/codebox
 
-OAUTH2_SERVER_URL: http://localhost:9191
-REALM_URL: ${OAUTH2_SERVER_URL}/realms/codebox
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+        boot.autoconfigure.security.servlet: DEBUG
+        cloud.gateway: DEBUG
+        apigateway: DEBUG

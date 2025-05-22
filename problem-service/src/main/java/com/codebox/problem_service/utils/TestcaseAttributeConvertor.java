@@ -1,6 +1,6 @@
 package com.codebox.problem_service.utils;
 
-import com.codebox.problem_service.pojo.Testcase;
+import com.codebox.problem_service.domain.pojo.Testcase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;

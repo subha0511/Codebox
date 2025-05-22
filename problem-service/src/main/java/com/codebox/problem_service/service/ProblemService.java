@@ -1,6 +1,6 @@
 package com.codebox.problem_service.service;
 
-import com.codebox.problem_service.model.Problem;
+import com.codebox.problem_service.domain.model.Problem;
 import com.codebox.problem_service.repository.ProblemRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

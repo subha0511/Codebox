@@ -1,17 +1,32 @@
 services:
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.1.0
-    command: [ 'start-dev','--http-port=9191','--import-realm' ]
-    volumes:
-      - ./realm-config:/opt/keycloak/data/import
-    container_name: keycloak
-    hostname: keycloak
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin1234
+  codebox-gateway:
+    image: codebox-gateway:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codebox-gateway
+    hostname: codebox-gateway
     ports:
-      - "9191:9191"
-    deploy:
-      resources:
-        limits:
-          memory: 512M
+      - "8001:9010"
+    environment:
+      - PROBLEM_SERVICE_URL=http://host.docker.internal:8080
+      - CONTEST_SERVICE_URL=http://host.docker.internal:8081
+      - SUBMISSION_SERVICE_URL=http://host.docker.internal:8082
+
+
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:26.1.0
+#    command: [ 'start-dev','--http-port=9191','--import-realm' ]
+#    volumes:
+#      - ./realm-config:/opt/keycloak/data/import
+#    container_name: keycloak
+#    hostname: keycloak
+#    environment:
+#      - KEYCLOAK_ADMIN=admin
+#      - KEYCLOAK_ADMIN_PASSWORD=admin1234
+#    ports:
+#      - "9191:9191"
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 512M

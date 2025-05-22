@@ -2,6 +2,18 @@ spring:
   application:
     name: submission-service
 
+  #  security:
+  #    oauth2:
+  #      client:
+  #        registration:
+  #          submission-service:
+  #            provider: submission-service
+  #            client-id: submission-service
+  #            client-secret: e6MnTijxlStyQqVvIj0idMaUz0NYNoe6
+  #            authorization-grant-type: client_credentials
+  #            scope: openid+profile+email
+  #
+  
   data:
     mongodb:
       host: ${SUBMISSION_DB_HOST:localhost}
@@ -12,12 +24,15 @@ spring:
       authentication-database: admin
 
   kafka:
-    bootstrap-servers=: localhost:9092
+    bootstrap-servers=: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     template.default-topic: problem-submission
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      properties.schema.registry.url: http://localhost:28081
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#    properties:
+#      spring.json.add.type.headers: false
+#      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#      properties.schema.registry.url: http://localhost:28081
 
 problem-service:
   url: ${PROBLEM_SERVICE_URL:http://localhost:8080}
@@ -37,6 +52,17 @@ resilience4j:
   retry.instances.problem-service:
     maxAttempts: 3
     waitDuration: 2s
+
+# Keycloak Configuration
+#keycloak:
+#  auth-server-url: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/auth}
+#  redirect-uri: ${OAUTH2_REDIRECT_URL:http://localhost:9010/login/oauth2/code/keycloak}
+#  token-uri: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/token}
+#  certificate-uri: ${OAUTH2_SERVER_URL:http://localhost:9191/realms/codebox/protocol/openid-connect/certs}
+#  scope: openid+profile+email
+#  client:
+#    id: api-gateway
+#    secret: t8Qd0iZg0i6oQQIwDYg4Ycrd6TrmMHKu
 
 springdoc:
   swagger-ui:

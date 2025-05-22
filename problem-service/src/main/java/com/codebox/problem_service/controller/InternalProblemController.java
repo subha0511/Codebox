@@ -1,6 +1,6 @@
 package com.codebox.problem_service.controller;
 
-import com.codebox.problem_service.model.Problem;
+import com.codebox.problem_service.domain.model.Problem;
 import com.codebox.problem_service.service.ProblemService;
 import io.swagger.v3.oas.annotations.Hidden;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Hidden
 @RestController
-@RequestMapping("/api/internal-problem")
+@RequestMapping("/api/internal/problem")
 public class InternalProblemController {
 
     @Autowired

@@ -3,16 +3,30 @@ spring:
 
   kafka:
     bootstrap-servers:
-    - localhost:9092
+      - ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: submission-worker
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      #      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
-        spring.json.trusted.packages: '*'
-        schema.registry.url: http://localhost:28081
-        specific.avro.reader: true
+        spring.json.trusted.packages: 'com.codebox'
+        spring.json.type.mapping: 'com.codebox.submission_service.domain.model.Submission:com.codebox.worker.domain.dto.SubmissionDTO'
+#        schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:28081}
+#        specific.avro.reader: true
+
+
+submission-service:
+  url: ${SUBMISSION_SERVICE_URL:http://localhost:8082}
+
+docker:
+  host: tcp://localhost:2375
+  tls-verify: false
+  pool:
+    size: 2
+    image-name: submission-worker
+    image-tag: latest
 
 server:
   port: 8083

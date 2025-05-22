@@ -164,10 +164,11 @@ public class SubmissionTestcase extends org.apache.avro.specific.SpecificRecordB
 
     /**
      * Gets the value of the 'input' field.
+     *
      * @return The value of the 'input' field.
      */
-    public java.lang.CharSequence getInput() {
-        return input;
+    public String getInput() {
+        return input.toString();
     }
 
     /**

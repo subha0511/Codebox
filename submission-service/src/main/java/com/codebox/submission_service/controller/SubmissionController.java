@@ -1,12 +1,12 @@
 package com.codebox.submission_service.controller;
 
-import com.codebox.shared_dtos.domain.problem.ProblemDetailDTO;
 import com.codebox.submission_service.client.ProblemClient;
-import com.codebox.submission_service.dto.SubmissionDTO;
+import com.codebox.submission_service.domain.dto.ProblemDTO;
+import com.codebox.submission_service.domain.model.Submission;
+import com.codebox.submission_service.domain.dto.SubmissionSummaryDTO;
 import com.codebox.submission_service.mapper.impl.ProblemTestcaseMapper;
 import com.codebox.submission_service.mapper.impl.SubmissionDetailMapper;
 import com.codebox.submission_service.mapper.impl.SubmissionMapper;
-import com.codebox.submission_service.model.Submission;
 import com.codebox.submission_service.service.SubmissionService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -46,14 +46,14 @@ public class SubmissionController {
     }
 
     @PostMapping(path = "/")
-    public ResponseEntity<?> createSubmission(@Valid @RequestBody SubmissionDTO submissionDTO) {
-        Optional<ProblemDetailDTO> problem = problemClient.getProblemById(submissionDTO.getProblemId());
+    public ResponseEntity<?> createSubmission(@Valid @RequestBody SubmissionSummaryDTO submissionSummaryDTO) {
+        Optional<ProblemDTO> problem = problemClient.getProblemById(submissionSummaryDTO.getProblemId());
 
         if (problem.isEmpty()) {
             return new ResponseEntity<>(Map.of("message", "Problem Not Found"), HttpStatus.NOT_FOUND);
         }
 
-        Submission submission = submissionMapper.mapFrom(submissionDTO);
+        Submission submission = submissionMapper.mapFrom(submissionSummaryDTO);
         submission.setSubmissionTestcases(problem.get().getTestcases().stream()
                 .map(problemTestcaseMapper::mapTo)
                 .toList());

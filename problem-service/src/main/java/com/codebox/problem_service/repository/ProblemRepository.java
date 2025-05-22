@@ -1,6 +1,6 @@
 package com.codebox.problem_service.repository;
 
-import com.codebox.problem_service.model.Problem;
+import com.codebox.problem_service.domain.model.Problem;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

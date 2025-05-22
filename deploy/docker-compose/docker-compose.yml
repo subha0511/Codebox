@@ -1,0 +1,200 @@
+version: "4"
+name: "Codebox"
+
+services:
+
+  codebox-gateway:
+    image: codebox-gateway:latest
+    build:
+      context: ../../api-gateway
+      dockerfile: Dockerfile
+    container_name: codebox-gateway
+    hostname: codebox-gateway
+    networks:
+      - backend
+    ports:
+      - "8001:9010"
+    depends_on:
+      - problem-service
+    environment:
+      - PROBLEM_SERVICE_URL=http://problem-service:8080
+      - CONTEST_SERVICE_URL=http://host.docker.internal:8081
+      - SUBMISSION_SERVICE_URL=http://submission-service:8082
+
+  problem-service:
+    image: problem-service:latest
+    build:
+      context: ../../problem-service
+      dockerfile: Dockerfile
+    container_name: problem-service
+    hostname: problem-service
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - problem-db
+    environment:
+      - PROBLEM_DB_URL=jdbc:postgresql://problem-db:5432/problem_db
+      - PROBLEM_DB_USERNAME=postgres
+      - PROBLEM_DB_PASSWORD=root
+
+  problem-db:
+    image: postgres:15-alpine
+    container_name: problem-db
+    restart: always
+    networks:
+      - backend
+    environment:
+      POSTGRES_DB: problem_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    volumes:
+      - problem-pgdata:/var/lib/postgresql/data
+
+  submission-service:
+    image: submission-service:latest
+    build:
+      context: ../../submission-service
+      dockerfile: Dockerfile
+    container_name: submission-service
+    hostname: submission-service
+    networks:
+      - backend
+    ports:
+      - "8082:8082"
+    depends_on:
+      - submission-db
+      - kafka
+    environment:
+      - SUBMISSION_DB_HOST=submission-db
+      - SUBMISSION_DB_PORT=27017
+      - SUBMISSION_DB_NAME=submission-service
+      - SUBMISSION_DB_USERNAME=mongodb
+      - SUBMISSION_DB_PASSWORD=password
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+
+  submission-db:
+    image: mongo
+    container_name: submission-service-db
+    environment:
+      MONGO_INITDB_DATABASE: submission-service
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - submission-data:/data/db
+    networks:
+      - backend
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: zookeeper
+    container_name: zookeeper-kafka
+    ports:
+      - "22181:22181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-01
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:7.5.0
+#    hostname: schema-registry
+#    container_name: schema-registry
+#    depends_on:
+#      - kafka
+#    ports:
+#      - "28081:8081"
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
+#      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+
+
+#  submission-db:
+#    image: mongo
+#    container_name: submission-db
+#    environment:
+#      MONGO_INITDB_DATABASE: submission-service
+#      MONGO_INITDB_ROOT_USERNAME: mongodb
+#      MONGO_INITDB_ROOT_PASSWORD: password
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - submission-data:/data/db
+#
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:7.5.0
+#    hostname: zookeeper
+#    container_name: zookeeper
+#    ports:
+#      - "22181:22181"
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#
+#  kafka:
+#    image: confluentinc/cp-kafka:7.5.0
+#    container_name: kafka
+#    ports:
+#      - "29092:29092"
+#      - "9092:9092"
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#
+#  kafka-ui:
+#    container_name: kafka-ui
+#    image: provectuslabs/kafka-ui:latest
+#    ports:
+#      - "28080:8080"
+#    depends_on:
+#      - kafka
+#      - schema-registry
+#    environment:
+#      KAFKA_CLUSTERS_NAME: local
+#      KAFKA_CLUSTERS_BOOTSTRAPSERVERS: kafka:29092
+#      KAFKA_CLUSTERS_SCHEMAREGISTRY: http://schema-registry:8081
+#      DYNAMIC_CONFIG_ENABLED: 'true'
+
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:7.5.0
+#    hostname: schema-registry
+#    container_name: schema-registry
+#    depends_on:
+#      - kafka
+#    ports:
+#      - "28081:8081"
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
+#      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  problem-pgdata:
+  submission-data:

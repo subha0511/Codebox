@@ -46,25 +46,25 @@ services:
       - "28080:8080"
     depends_on:
       - kafka
-      - schema-registry
+    #      - schema-registry
     environment:
       KAFKA_CLUSTERS_NAME: local
       KAFKA_CLUSTERS_BOOTSTRAPSERVERS: kafka:29092
-      KAFKA_CLUSTERS_SCHEMAREGISTRY: http://schema-registry:8081
+      #      KAFKA_CLUSTERS_SCHEMAREGISTRY: http://schema-registry:8081
       DYNAMIC_CONFIG_ENABLED: 'true'
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.5.0
-    hostname: schema-registry
-    container_name: schema-registry
-    depends_on:
-      - kafka
-    ports:
-      - "28081:8081"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:7.5.0
+#    hostname: schema-registry
+#    container_name: schema-registry
+#    depends_on:
+#      - kafka
+#    ports:
+#      - "28081:8081"
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
+#      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
 
 volumes:
   submission-data:

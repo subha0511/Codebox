@@ -2,8 +2,8 @@ package com.codebox.submission_service.mapper.impl;
 
 import com.codebox.shared_dtos.schema.SubmissionSchema;
 import com.codebox.submission_service.mapper.Mapper;
-import com.codebox.submission_service.model.Submission;
-import com.codebox.submission_service.pojo.SubmissionTestcase;
+import com.codebox.submission_service.domain.model.Submission;
+import com.codebox.submission_service.domain.pojo.SubmissionTestcase;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;

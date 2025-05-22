@@ -1,10 +1,10 @@
 package com.codebox.problem_service.controller;
 
-import com.codebox.problem_service.dto.ProblemDetailDTO;
-import com.codebox.problem_service.dto.ProblemMetadataDTO;
+import com.codebox.problem_service.domain.dto.ProblemDTO;
+import com.codebox.problem_service.domain.dto.ProblemSummaryDTO;
 import com.codebox.problem_service.mapper.impl.ProblemDetailMapper;
 import com.codebox.problem_service.mapper.impl.ProblemMapper;
-import com.codebox.problem_service.model.Problem;
+import com.codebox.problem_service.domain.model.Problem;
 import com.codebox.problem_service.service.ProblemService;
 import com.codebox.problem_service.utils.MapperUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,23 +38,23 @@ public class ProblemController {
     private MapperUtils mapperUtils;
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ProblemDetailDTO> getProblemById(@PathVariable("id") int id) {
+    public ResponseEntity<ProblemDTO> getProblemById(@PathVariable("id") int id) {
         Optional<Problem> problem = problemService.getProblemById(id);
         return problem.map(value -> ResponseEntity.ok(problemDetailMapper.mapTo(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(path = "")
-    public Page<ProblemMetadataDTO> getPaginatedProblems(
+    public Page<ProblemSummaryDTO> getPaginatedProblems(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
         return mapperUtils.mapEntityPageIntoDtoPage(
-                problemService.getPaginatedProblems(page, size), ProblemMetadataDTO.class);
+                problemService.getPaginatedProblems(page, size), ProblemSummaryDTO.class);
     }
 
     @PostMapping(path = "/create")
-    public ProblemDetailDTO createProblem(@RequestBody ProblemDetailDTO problemDetailDTO) {
-        Problem problem = problemDetailMapper.mapFrom(problemDetailDTO);
+    public ProblemDTO createProblem(@RequestBody ProblemDTO problemDTO) {
+        Problem problem = problemDetailMapper.mapFrom(problemDTO);
         Problem savedProblem = problemService.saveProblem(problem);
         return problemDetailMapper.mapTo(savedProblem);
     }
